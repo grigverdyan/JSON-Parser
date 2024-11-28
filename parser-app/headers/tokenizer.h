@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include <cctype>
+#include <cstring>
 
 namespace js
 {
@@ -107,6 +107,7 @@ public:
                 throw std::runtime_error("[Error]: Invalid JSON. Unexpected character found -> " + std::string(1, currentChar));
             }
         }
+        return tokens;
     }
 
 private:
@@ -118,7 +119,7 @@ private:
         }
     }
 
-    std::string& parseString()
+    std::string parseString()
     {
         std::string result;
         ++index_;

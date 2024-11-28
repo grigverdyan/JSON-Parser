@@ -52,22 +52,22 @@ public:
     virtual std::string stringify() const override
     {
         return std::visit(
-            [](auto&& arg)
+            [](auto&& arg) -> std::string
             {
                 using T = std::decay_t<decltype(arg)>;
                 if constexpr (std::is_same_v<T, bool>)
                 {
                     return arg ? "true" : "false";
                 }
-                if constexpr (std::is_same_v<T, int>)
+                else if constexpr (std::is_same_v<T, int>)
                 {
                     return std::to_string(arg);
                 }
-                if constexpr (std::is_same_v<T, std::string>)
+                else if constexpr (std::is_same_v<T, std::string>)
                 {
                     return "\"" + arg + "\"";
                 }
-                return "null";
+                else return "null";
             }, value_
         );
     }
@@ -101,16 +101,13 @@ public:
     {
         std::string resultJson = "{";
         bool first = true;
-        std::for_each(
-            children_.begin(), children_.end(),
-            [&](const auto& key, const auto& child)
-            {
-                if (!first)
-                    resultJson += ",";
-                resultJson += "\"" + key + "\":" + child->stringify();
-                first = false;
-            }
-        );
+        for (const auto& [key, child] : children_)
+        {
+            if (!first)
+                resultJson += ",";
+            resultJson += "\"" + key + "\":" + child->stringify();
+            first = false;
+        }
         resultJson += "}";
         return resultJson;
     }
@@ -154,6 +151,7 @@ public:
         );
         // resultJson.pop_back(); // remove last "," // redundant ? need to test
         resultJson += "]";
+        return resultJson;
     }
 };
 

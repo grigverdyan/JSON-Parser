@@ -1,7 +1,7 @@
 .PHONY : all clean fclean re
 
 TARGET			= json_parser
-CC				= cc
+CC				= g++ -std=c++23
 CFLAGS			= -Wall -Wextra -Werror -g
 RM				= rm -rf
 MKDIR			= mkdir -p
