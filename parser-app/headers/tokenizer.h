@@ -5,29 +5,32 @@
 #include <vector>
 #include <iostream>
 
+
+namespace js
+{
+
+enum class TokenType
+{
+    ObjectStart,    // {
+    ObjectEnd,      // }
+    ArrayStart,     // [
+    ArrayEnd,       // ]
+    String,         // " "
+    Number,         // integers, floats, etc
+    Boolean,        // true || false
+    Comma,          // ,
+    Colon,          // :
+    Null            // null
+};
+
+struct Token
+{
+    TokenType type;
+    std::string value;
+};
+
 class Tokenizer
 {
-public:
-    enum class TokenType
-    {
-        ObjectStart,    // {
-        ObjectEnd,      // }
-        ArrayStart,     // [
-        ArrayEnd,       // ]
-        String,         // " "
-        Number,         // integers, floats, etc
-        Boolean,        // true || false
-        Comma,          // ,
-        Colon,          // :
-        Null            // null
-    };
-
-    struct Token
-    {
-        TokenType type;
-        std::string value;
-    };
-
 private:
     std::string json_;
     size_t index_;
@@ -148,5 +151,9 @@ private:
         return result;
     }
 };
+
+
+
+} // namespace js
 
 #endif /* TOKENIZER_H */

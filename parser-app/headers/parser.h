@@ -6,6 +6,9 @@
 #include "tokenizer.h"
 #include "jsNode.h"
 
+namespace js
+{
+
 class Parser
 {
 private:
@@ -51,15 +54,17 @@ private:
         }
     }
 
-    std::shared_ptr<valueNode> parseString();
+    std::shared_ptr<ValueNode> parseString();
 
-    std::shared_ptr<valueNode> parseNumber();
+    std::shared_ptr<ValueNode> parseNumber();
 
-    std::shared_ptr<valueNode> parseLiteral();
+    std::shared_ptr<ValueNode> parseLiteral();
 
     std::shared_ptr<ObjectNode> parseObject();
 
     std::shared_ptr<ArrayNode> parseArray();
 };
+
+} // namespace js
 
 #endif /* PARSER_H */

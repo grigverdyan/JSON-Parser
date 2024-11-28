@@ -7,6 +7,10 @@
 #include <memory>
 #include <algorithm>
 
+
+namespace js
+{
+
 // JSON Node interface
 struct Node
 {
@@ -147,5 +151,8 @@ public:
         resultJson += "]";
     }
 };
+
+
+} // namespace js
 
 #endif /* JSNODE_H */
