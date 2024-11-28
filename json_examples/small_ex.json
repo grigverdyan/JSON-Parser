@@ -1,0 +1,21 @@
+{
+    "name": "John Doe",
+    "age": 30,
+    "isStudent": false,
+    "skills": ["JavaScript", "Python", "C++"],
+    "address": {
+        "street": "123 Main St",
+        "city": "Anytown",
+        "zipcode": "12345"
+    },
+    "projects": [
+        {
+            "name": "Project A",
+            "status": "completed"
+        },
+        {
+            "name": "Project B",
+            "status": "in progress"
+        }
+    ]
+}
