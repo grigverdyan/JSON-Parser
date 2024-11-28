@@ -6,7 +6,7 @@
 #include <unordered_map>
 #include <memory>
 #include <algorithm>
-
+#include <iostream>
 
 namespace js
 {
@@ -22,6 +22,10 @@ struct Node
     // Node& operator=(Node&&) = delete;
 
     virtual std::string stringify() const = 0;
+    virtual void print() const
+    {
+        std::cout << stringify() << std::endl;
+    }
 };
 
 class ValueNode : public Node
@@ -67,6 +71,7 @@ public:
             }, value_
         );
     }
+
 };
 
 class ObjectNode : public Node

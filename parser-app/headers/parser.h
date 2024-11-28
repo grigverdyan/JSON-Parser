@@ -28,14 +28,28 @@ public:
     }
 
 private:
-    std::shared_ptr<Node>   parseValue()
+
+    const Token& nextToken()
     {
         if (index_ >= tokens_.size())
         {
             throw std::runtime_error("[Error]: Invalid JSON. Unexpected end of JSON.");
         }
+        return tokens_[index_++];
+    }
 
-        const Token& token = tokens_[index_];
+    const Token& peekToken() const
+    {
+        if (index_ >= tokens_.size())
+        {
+            throw std::runtime_error("[Error]: Invalid JSON. Unexpected end of JSON.");
+        }
+        return tokens_[index_];
+    }
+
+    std::shared_ptr<Node>   parseValue()
+    {
+        const Token& token = peekToken();
         switch (token.type)
         {
             case TokenType::ObjectStart:
@@ -54,15 +68,84 @@ private:
         }
     }
 
-    std::shared_ptr<ValueNode> parseString();
+    std::shared_ptr<ValueNode> parseString()
+    {
+        const Token& token = nextToken();
+        return std::make_shared<ValueNode>(token.value);
+    }
 
-    std::shared_ptr<ValueNode> parseNumber();
+    std::shared_ptr<ValueNode> parseNumber()
+    {
+        const Token& token = nextToken();
+        return std::make_shared<ValueNode>(token.value);
+    }
 
-    std::shared_ptr<ValueNode> parseLiteral();
+    std::shared_ptr<ValueNode> parseLiteral()
+    {
+        const Token& token = nextToken();
+        if (token.type == TokenType::Boolean)
+        {
+            if (token.value == "true")
+                return std::make_shared<ValueNode>(true);
+            else
+                return std::make_shared<ValueNode>(false);
+        }
+        else
+            return std::make_shared<ValueNode>(nullptr);
+    }
 
-    std::shared_ptr<ObjectNode> parseObject();
+    std::shared_ptr<ObjectNode> parseObject()
+    {
+        nextToken(); // release '{'
+        auto object = std::make_shared<ObjectNode>();
+        
+        while (peekToken().type != TokenType::ObjectEnd)
+        {
+            if (peekToken().type != TokenType::String)
+            {
+                throw std::runtime_error("[Error]: Invalid JSON. Expected key in object.");
+            }
 
-    std::shared_ptr<ArrayNode> parseArray();
+            auto& keyToken = nextToken();
+            if (nextToken().type != TokenType::Colon)
+            {
+                throw std::runtime_error("[Error]: Invalid JSON. Expected ':' after key in object.");
+            }
+
+            object->addChild(keyToken.value, parseValue());
+            if (peekToken().type == TokenType::Comma)
+            {
+                nextToken(); // release ','
+            }
+            else if (peekToken().type != TokenType::ObjectEnd)
+            {
+                throw std::runtime_error("[Error]: Invalid JSON. Expected ',' or '}' after value in object.");
+            }
+        }
+        nextToken(); // release '}'
+        return object;
+    }
+
+    std::shared_ptr<ArrayNode> parseArray()
+    {
+        nextToken(); // release '['
+        auto array = std::make_shared<ArrayNode>();
+        
+        while (peekToken().type != TokenType::ArrayEnd)
+        {
+            array->addChild(parseValue());
+            if (peekToken().type == TokenType::Comma)
+            {
+                nextToken(); // release ','
+            }
+            else if (peekToken().type != TokenType::ArrayEnd)
+            {
+                throw std::runtime_error("[Error]: Invalid JSON. Expected ',' or ']' after value in array.");
+            }
+        }
+        nextToken(); // release ']'
+        return array;
+    }
 };
 
 } // namespace js

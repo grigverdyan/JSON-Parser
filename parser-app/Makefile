@@ -2,7 +2,7 @@
 
 TARGET			= json_parser
 CC				= cc
-CFLAGS			= -Wall -Wextra -Werror #g
+CFLAGS			= -Wall -Wextra -Werror -g
 RM				= rm -rf
 MKDIR			= mkdir -p
 
@@ -11,9 +11,9 @@ HEADERS_FLAG	= -I$(HEADERS_DIR)
 HEADERS			= $(HEADERS_DIR)/*.h
 
 SRC_DIR			= sources
-SRC_FILES		= $(wildcard $(SRC_DIR)/*.c)
+SRC_FILES		= $(wildcard $(SRC_DIR)/*.cpp)
 
-OBJS			= $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC_FILES))
+OBJS			= $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRC_FILES))
 OBJ_DIR			= objs
 
 # Colors
@@ -33,7 +33,7 @@ $(TARGET) : $(OBJS)
 	@echo $(GREEN) "  Creating $(TARGET)" $(RESET)
 	@$(CC) $(CFLAGS) $(OBJS) -o $(TARGET)	
 
-$(OBJ_DIR)/%.o : $(SRC_DIR)/%.c | $(OBJ_DIR)
+$(OBJ_DIR)/%.o : $(SRC_DIR)/%.cpp | $(OBJ_DIR)
 	@$(CC) $(CFLAGS) $(HEADERS_FLAG) -c $< -o $@
 
 $(OBJ_DIR) :
