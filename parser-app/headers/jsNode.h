@@ -22,10 +22,7 @@ struct Node
     // Node& operator=(Node&&) = delete;
 
     virtual std::string stringify() const = 0;
-    virtual void print() const
-    {
-        std::cout << stringify() << std::endl;
-    }
+    virtual void print(size_t identLvl = 0) const = 0;
 };
 
 class ValueNode : public Node
@@ -72,6 +69,14 @@ public:
         );
     }
 
+    // Print JSON Value.
+    virtual void print(size_t identLvl = 0) const override
+    {
+        std::string padding(identLvl, ' ');
+        std::cout << identLvl << "ValueNode: ";
+        std::visit([](const auto& arg) { std::cout << arg; }, value_);
+        std::cout << std::endl;
+    }
 };
 
 class ObjectNode : public Node
@@ -110,6 +115,18 @@ public:
         }
         resultJson += "}";
         return resultJson;
+    }
+
+    // Print JSON Object Node.
+    virtual void print(size_t identLvl = 0) const override
+    {
+        std::string padding(identLvl, ' ');
+        std::cout << padding << "ObjectNode: " << std::endl;
+        for (const auto& [key, child] : children_)
+        {
+            std::cout << padding << " Key: " << key << std::endl;
+            child->print(identLvl + 4);
+        }
     }
 };
 
@@ -152,6 +169,17 @@ public:
         // resultJson.pop_back(); // remove last "," // redundant ? need to test
         resultJson += "]";
         return resultJson;
+    }
+
+    // Print JSON Array.
+    virtual void print(size_t identLvl = 0) const override
+    {
+        std::string padding(identLvl, ' ');
+        std::cout << padding << "ArrayNode: " << std::endl;
+        for (const auto& child : children_)
+        {
+            child->print(identLvl + 4);
+        }
     }
 };
 
