@@ -4,6 +4,7 @@
 #include <string>
 #include <variant>
 #include <unordered_map>
+//#include <map>
 #include <memory>
 #include <algorithm>
 #include <iostream>
@@ -73,7 +74,7 @@ public:
     virtual void print(size_t identLvl = 0) const override
     {
         std::string padding(identLvl, ' ');
-        std::cout << identLvl << "ValueNode: ";
+        std::cout << padding << "ValueNode: ";
         std::visit([](const auto& arg) { std::cout << arg; }, value_);
         std::cout << std::endl;
     }
