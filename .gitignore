@@ -1,0 +1,17 @@
+# Ignore object directory
+/obj/
+
+# Ignore Visual Studio files
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.sln
+
+# Ignore other common files
+*.DS_Store
+*.vscode/
+*.swp
+*.out
+*.o
+*.obj
+*.exe
